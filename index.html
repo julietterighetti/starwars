@@ -1,0 +1,103 @@
+<html>
+<head>
+
+	<title>Star Wars Quotes</title>
+	<meta charset="UTF-8">
+
+    <style type="text/css">
+        div {
+            border: solid black 1px;
+            display: inline-block;
+            padding: 10px;
+            margin: 10px;
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/javascript" src="react.js"></script>
+    <script type="text/javascript" src="JSXTransformer.js"></script>
+   	<script type="text/javascript" src="StarWars.js"></script>
+    
+    <script type="text/jsx">
+     var rString = ''
+     var Tree =  React.createClass({
+         render : function () {
+            return (<div>
+                 <Letters onLetterSelected={this.selectLetter}/>
+                 <Score letter={this.state.letter}/>
+                 <Random/>
+             </div>);
+       },
+ 
+        getInitialState : function() {
+             return{
+                 letter : ''
+             }
+         },
+ 
+         selectLetter : function (newLetter) {
+             return this.setState({letter : newLetter});
+         }
+     });
+ 
+     var Letters = React.createClass({
+ 
+         render : function () {
+             var handler = this.props.onLetterSelected;
+ 
+             return (<div>
+                 {letters.map(function(item) {
+                     return <Letter itemValue={item} whenClick={handler} />;
+                 })}
+             </div>);
+         },
+ 
+     });
+ 
+     var Letter = React.createClass({
+ 
+         render : function () {
+             var classname = this.state.selected ? 'selected' : '';
+             return (<div className={classname} onClick={this.handleClick}><img src={this.props.itemValue.image} width="100" height="100"/></div>);
+         },
+         getInitialState : function () {
+             return {selected : false };
+         },
+ 
+         handleClick : function () {
+           rString = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+             this.props.whenClick(this.props.itemValue);
+             //this.setState({selected : true});
+        }
+     });
+ 
+ 
+     var Score = React.createClass({
+         render : function () {
+             return (<div> {this.props.letter.author} a dit : " {this.props.letter.quote} "</div>);
+         },
+ 
+     });
+      var Random = React.createClass({
+         render : function () {
+             return (<div> Chaine aléatoire : {rString} </div>);
+        },
+     });
+ 
+     React.render(<Tree />, document.getElementById('root'));
+ 
+     function randomString(length, chars) {
+        var result = '';
+         for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+         return result;
+       }
+ 
+ 
+     </script>
+</body>
+</html>
